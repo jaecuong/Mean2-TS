@@ -56,6 +56,7 @@ class Server {
     dotenv.load({ path: '.env' });
 
     this._app.use(compression());
+    this._app.use('/', express.static(path.join(__dirname, '../public')));
     this._app.use(bodyParser.json()); // Parses urlencoded bodies
     this._app.use(bodyParser.urlencoded({ extended: false })); // Send JSON responses
     this._app.use(cookieParser());

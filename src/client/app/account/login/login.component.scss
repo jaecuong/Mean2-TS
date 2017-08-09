@@ -1,22 +1,22 @@
-
+@import "~styles.scss";
 
 /* style for message error */
 
 input.ng-valid,
 input.ng-prestine,
 input.ng-invalid {
-    border-left: 15px solid dodgerblue !important;
-    border: 1px solid dodgerblue;
+    border-left: $input-border-left !important;
+    border: $input-border;
 }
 
 input.ng-valid {
-    border: 1px solid dodgerblue;
-    background-color: white;
+    border: $input-border;
+    background-color: $white-background;
 }
 
-input.ng-invaid {
-    background-color: red;
-}
+// input.ng-invalid {
+//     border: 1px solid red;
+// }
 
 .err-message {
     font-size: 18px;

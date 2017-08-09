@@ -8,6 +8,7 @@ var express = require("express");
 var http = require("http");
 var morgan = require("morgan");
 var os = require("os");
+var path = require("path");
 var index_1 = require("../configs/index");
 var index_2 = require("./utils/index");
 var routes_1 = require("./routes");
@@ -25,6 +26,7 @@ var Server = (function () {
         this._app = express();
         dotenv.load({ path: '.env' });
         this._app.use(compression());
+        this._app.use('/', express.static(path.join(__dirname, '../public')));
         this._app.use(bodyParser.json());
         this._app.use(bodyParser.urlencoded({ extended: false }));
         this._app.use(cookieParser());

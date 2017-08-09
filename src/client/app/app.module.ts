@@ -6,28 +6,32 @@ import { HttpModule } from '@angular/http';
 import { AppRoutingModule } from './app-routing.module';
 import { SharedModule } from './shared/shared.module';
 import { AppComponent } from './app.component';
-import { HomeComponent } from './home/home.component';
-import { AboutComponent } from './about/about.component';
 import { LoginComponent } from './account/login/login.component';
-import { SignupComponent } from './account/signup/signup.component';
-import { CatComponent } from './cat/cat.component';
-// import { DataService } from './services/data.service';
-import { AlertComponent } from './directives/index';
-import { AuthGuard } from './shared/guard/index';
-import { AlertService, AuthenticationService, UserService, DataService } from './services/index';
 import { AppConfig } from './app.config';
 import { HeaderComponent } from './header/header.component';
+import { FooterComponent } from './footer/footer.component';
+import { AdminComponent } from './admin/admin.component';
+import { AccountComponent } from './account/account.component';
+import { LogoutComponent } from './account/logout/logout.component';
+import { RegisterComponent } from './account/register/register.component';
+import { NotFoundComponent } from './not-found/not-found.component';
+import { CatsComponent } from './cats/cats.component';
+import { AboutComponent } from './about/about.component';
+import { AuthService, AuthGuardLogin, AuthGuardAdmin, CatService, UserService } from './services/index';
 
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent,
-    AboutComponent,
-    CatComponent,
     LoginComponent,
-    SignupComponent,
-    AlertComponent,
-    HeaderComponent
+    HeaderComponent,
+    FooterComponent,
+    AdminComponent,
+    AccountComponent,
+    LogoutComponent,
+    RegisterComponent,
+    NotFoundComponent,
+    CatsComponent,
+    AboutComponent
   ],
   imports: [
     BrowserModule,
@@ -39,11 +43,11 @@ import { HeaderComponent } from './header/header.component';
   ],
   providers: [
     AppConfig,
-    DataService,
-    AuthGuard,
-    AlertService,
-    AuthenticationService,
-    UserService,
+    AuthService,
+    AuthGuardLogin,
+    AuthGuardAdmin,
+    CatService,
+    UserService
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   bootstrap: [AppComponent]

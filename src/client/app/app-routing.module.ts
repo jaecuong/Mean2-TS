@@ -1,24 +1,31 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+
 import { AppComponent } from './app.component';
-import { HomeComponent } from './home/home.component';
-import { AboutComponent } from './about/about.component';
-import { CatComponent } from './cat/cat.component';
 import { LoginComponent } from './account/login/login.component';
-import { SignupComponent } from './account/signup/signup.component';
-import { AuthGuard } from "./shared/guard/index";
+import { AdminComponent } from './admin/admin.component';
+import { AuthGuardLogin } from './services/auth-guard-login.service';
+import { AuthGuardAdmin } from './services/auth-guard-admin.service';
+import { LogoutComponent } from './account/logout/logout.component';
+import { AccountComponent } from './account/account.component';
+import { RegisterComponent } from './account/register/register.component';
+import { CatsComponent } from './cats/cats.component';
+import { NotFoundComponent } from './not-found/not-found.component';
+import { AboutComponent } from './about/about.component';
 
 const routes: Routes = [
-  { path: '', component: HomeComponent,canActivate: [AuthGuard]},
-  { path: 'about', component: AboutComponent },
-  { path: 'cat', component: CatComponent },
+  { path: '', component: AboutComponent },
+  { path: 'cats', component: CatsComponent },
+  { path: 'register', component: RegisterComponent },
   { path: 'login', component: LoginComponent },
-  { path: 'signup', component: SignupComponent },
-
+  { path: 'logout', component: LogoutComponent },
+  { path: 'account', component: AccountComponent, canActivate: [AuthGuardLogin] },
+  { path: 'admin', component: AdminComponent, canActivate: [AuthGuardAdmin] },
+  { path: 'notfound', component: NotFoundComponent },
 
 
   // otherwise redirect to home
-    { path: '**', redirectTo: '' }
+    { path: '**', redirectTo: '/notfound' }
 ];
 
 @NgModule({
