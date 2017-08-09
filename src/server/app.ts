@@ -118,8 +118,8 @@ class Server {
   };
 
   start(): void {
-    // if (cluster.isMaster) {//Use this line when running in production mode
-    if (cluster.isMaster && process.env.NODE_ENV !== 'development') { // Use this line when running in development mode
+    if (cluster.isMaster) { // Use this line when running in production mode
+      // if (cluster.isMaster && process.env.NODE_ENV !== 'development') { // Use this line when running in development mode
 
       mongoose.connect(process.env.MONGODB_URI, { useMongoClient: true });
       const db = mongoose.connection;
@@ -138,39 +138,54 @@ class Server {
         // this._app.get('/*', function (req, res) {
         //   res.sendFile(path.join(__dirname, '../public/index.html'));
         // });
-        logger.info(`Cluster is running on CPU with ${os.cpus().length} logical processors`);
-        for (let c = 0; c < os.cpus().length; c++) {
+        const numberWorkers = os.cpus().length;
+        logger.info(`Master ${process.pid} is running`);
+        logger.info(`Cluster is running on CPU with ${numberWorkers} logical processors`);
+        for (let c = 0; c < numberWorkers; c++) {
           cluster.fork();
         }
+        this.workerEvents();
 
-        // Listen for dying workers
-        cluster.on('exit', (worker: Worker, code: number, signal: string) => {
-          // Replace the dead worker, we're not sentimental
-          logger.info(`Worker ${worker.process.pid} died.`);
-        });
-
-        cluster.on('listening', (worker: Worker, address: ServerAddress) => {
-          logger.info(`Worker ${worker.process.pid} connected to port ${address.port}.`);
-        });
       });
 
-    } else {
-      this._server.listen(process.env.PORT || 3000);
+    } else { // development code
+
+      this._server.listen(process.env.PORT || 3000, () => {
+        logger.info('Process ' + process.pid + ' is listening to all incoming requests');
+      });
       this._server.on('error', error => this._onError(error));
       this._server.on('listening', () => this._onListening());
-      // db.sync will be used only 1 time at the beginning of production stage
-      // sequelize.sync().then(() => {
-      //   logger.info('Database synced.');
-
-      // }).catch((error: Error) => {
-      //   logger.error(`Database synced got error : ${error.message}`);
-      // });
 
     }
   }
 
+  private workerEvents(): void {
+    cluster.on('online', function (worker) {
+      logger.info(`Worker ${worker.process.pid} is online`);
+    });
+
+    // Listen for dying workers
+    cluster.on('exit', (worker: Worker, code: number, signal: string) => {
+      if (signal) {
+        logger.error(`Worker ${worker.process.pid} was killed by signal: ${signal}`);
+      } else if (code !== 0) {
+        logger.error(`Worker ${worker.process.pid} exited with error code: ${code}`);
+      } else {
+        logger.info(`Worker ${worker.process.pid} success!`);
+      }
+      logger.info(`Starting a new worker`);
+      cluster.fork();
+    });
+
+    cluster.on('listening', (worker: Worker, address: ServerAddress) => {
+      logger.info(`Worker ${worker.process.pid} connected to port ${address.port}.`);
+    });
+  }
+
   stop(): void {
     this._server.close();
+    // Process reload ongoing close connections, clear cache, etc
+    // by default, you have 1600ms
     process.exit(0);
   }
 }

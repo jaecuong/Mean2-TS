@@ -72,7 +72,7 @@ var Server = (function () {
     ;
     Server.prototype.start = function () {
         var _this = this;
-        if (cluster.isMaster && process.env.NODE_ENV !== 'development') {
+        if (cluster.isMaster) {
             mongoose.connect(process.env.MONGODB_URI, { useMongoClient: true });
             var db = mongoose.connection;
             mongoose.Promise = global.Promise;
@@ -83,23 +83,43 @@ var Server = (function () {
             db.once('open', function () {
                 index_2.logger.info("Connected to MongoDB");
                 routes_1.default(_this._app);
-                index_2.logger.info("Cluster is running on CPU with " + os.cpus().length + " logical processors");
-                for (var c = 0; c < os.cpus().length; c++) {
+                var numberWorkers = os.cpus().length;
+                index_2.logger.info("Master " + process.pid + " is running");
+                index_2.logger.info("Cluster is running on CPU with " + numberWorkers + " logical processors");
+                for (var c = 0; c < numberWorkers; c++) {
                     cluster.fork();
                 }
-                cluster.on('exit', function (worker, code, signal) {
-                    index_2.logger.info("Worker " + worker.process.pid + " died.");
-                });
-                cluster.on('listening', function (worker, address) {
-                    index_2.logger.info("Worker " + worker.process.pid + " connected to port " + address.port + ".");
-                });
+                _this.workerEvents();
             });
         }
         else {
-            this._server.listen(process.env.PORT || 3000);
+            this._server.listen(process.env.PORT || 3000, function () {
+                index_2.logger.info('Process ' + process.pid + ' is listening to all incoming requests');
+            });
             this._server.on('error', function (error) { return _this._onError(error); });
             this._server.on('listening', function () { return _this._onListening(); });
         }
+    };
+    Server.prototype.workerEvents = function () {
+        cluster.on('online', function (worker) {
+            index_2.logger.info("Worker " + worker.process.pid + " is online");
+        });
+        cluster.on('exit', function (worker, code, signal) {
+            if (signal) {
+                index_2.logger.error("Worker " + worker.process.pid + " was killed by signal: " + signal);
+            }
+            else if (code !== 0) {
+                index_2.logger.error("Worker " + worker.process.pid + " exited with error code: " + code);
+            }
+            else {
+                index_2.logger.info("Worker " + worker.process.pid + " success!");
+            }
+            index_2.logger.info("Starting a new worker");
+            cluster.fork();
+        });
+        cluster.on('listening', function (worker, address) {
+            index_2.logger.info("Worker " + worker.process.pid + " connected to port " + address.port + ".");
+        });
     };
     Server.prototype.stop = function () {
         this._server.close();

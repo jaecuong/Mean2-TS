@@ -17,8 +17,7 @@ input.ng-valid {
 // input.ng-invalid {
 //     border: 1px solid red;
 // }
-
 .err-message {
-    font-size: 18px;
-    color: red;
+    font-size: $err-font;
+    color: $err-color;
 }
