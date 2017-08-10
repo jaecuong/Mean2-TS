@@ -1,0 +1,35 @@
+@import "~styles.scss";
+
+/* input styling */
+
+input.ng-valid,
+input.ng-prestine,
+input.ng-invalid {
+    border-left: $input-border-left !important;
+    border: $input-border;
+}
+
+input.ng-valid {
+    border: $input-border;
+    background-color: $white-background;
+}
+
+/* listbox styling */
+select.ng-valid,
+select.ng-prestine,
+select.ng-invalid {
+    border-left: $input-border-left !important;
+    border: $input-border;
+}
+
+select.ng-valid {
+    border: $input-border;
+    background-color: $white-background;
+}
+// input.ng-invalid {
+//     border: 1px solid red;
+// }
+.err-message {
+    font-size: $err-font;
+    color: $err-color;
+}

@@ -1,3 +1,5 @@
+import { logger, skip, stream } from '../utils/index';
+
 abstract class BaseCtrl {
 
   abstract model: any;
@@ -20,6 +22,8 @@ abstract class BaseCtrl {
 
   // Insert
   insert = (req, res) => {
+    logger.info(`Insert new object - Request ${req} `);
+    logger.info(`Insert new object - Response ${res} `);
     const obj = new this.model(req.body);
     obj.save((err, item) => {
       // 11000 is the code for duplicate key error

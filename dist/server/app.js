@@ -9,15 +9,15 @@ var http = require("http");
 var morgan = require("morgan");
 var os = require("os");
 var path = require("path");
+var cors = require("cors");
 var index_1 = require("../configs/index");
 var index_2 = require("./utils/index");
 var routes_1 = require("./routes");
 var mongoose = require("mongoose");
 var dotenv = require("dotenv");
 var options = {
-    allowedHeaders: ['X-Requested-With', 'Content-Type', 'Authorization'],
-    credentials: true,
-    methods: 'GET,POST',
+    credentials: false,
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     origin: '*',
     preflightContinue: false
 };
@@ -32,6 +32,7 @@ var Server = (function () {
         this._app.use(cookieParser());
         this._app.use(express.static(index_1.configs.getServerConfig().publicPath));
         this._app.use(morgan('combined', { skip: index_2.skip, stream: index_2.stream }));
+        this._app.use(cors());
         this._app.use(function (error, req, res, next) {
             if (error) {
                 index_2.logger.error("Request got error = " + error.message);
@@ -40,6 +41,10 @@ var Server = (function () {
         });
         this._app.get('/*', function (req, res) {
             res.sendFile(index_1.configs.getServerConfig().publicPathHtml);
+        });
+        this._app.use(function (req, res, next) {
+            res.header('Access-Control-Allow-Origin', 'http://localhost:8000');
+            next();
         });
         this._server = http.createServer(this._app);
     }

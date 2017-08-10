@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+var index_1 = require("../utils/index");
 var BaseCtrl = (function () {
     function BaseCtrl() {
         var _this = this;
@@ -20,6 +21,8 @@ var BaseCtrl = (function () {
             });
         };
         this.insert = function (req, res) {
+            index_1.logger.info("Insert new object - Request " + req + " ");
+            index_1.logger.info("Insert new object - Response " + res + " ");
             var obj = new _this.model(req.body);
             obj.save(function (err, item) {
                 if (err && err.code === 11000) {

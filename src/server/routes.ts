@@ -1,4 +1,5 @@
 import * as express from 'express';
+import { logger, skip, stream } from './utils/index';
 
 import CatCtrl from './controllers/cat';
 import UserCtrl from './controllers/user';
@@ -6,7 +7,7 @@ import Cat from './models/cat';
 import User from './models/user';
 
 export default function setRoutes(app) {
-
+  logger.info(`Route setup is starting !!!`);
   const router = express.Router();
 
   const catCtrl = new CatCtrl();

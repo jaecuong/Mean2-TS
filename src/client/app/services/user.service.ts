@@ -3,6 +3,7 @@ import { Http, Headers, RequestOptions } from '@angular/http';
 
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
+import { AppConfig } from '../app.config';
 
 @Injectable()
 export class UserService {
@@ -10,10 +11,10 @@ export class UserService {
   private headers = new Headers({ 'Content-Type': 'application/json', 'charset': 'UTF-8' });
   private options = new RequestOptions({ headers: this.headers });
 
-  constructor(private http: Http) { }
+  constructor(private http: Http, private config: AppConfig) { }
 
   register(user): Observable<any> {
-    return this.http.post('/api/user', JSON.stringify(user), this.options);
+    return this.http.post(this.config.apiUrl + '/user', JSON.stringify(user), this.options);
   }
 
   login(credentials): Observable<any> {

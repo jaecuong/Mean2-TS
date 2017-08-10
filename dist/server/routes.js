@@ -1,9 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var express = require("express");
+var index_1 = require("./utils/index");
 var cat_1 = require("./controllers/cat");
 var user_1 = require("./controllers/user");
 function setRoutes(app) {
+    index_1.logger.info("Route setup is starting !!!");
     var router = express.Router();
     var catCtrl = new cat_1.default();
     var userCtrl = new user_1.default();

@@ -33,9 +33,11 @@ import * as dotenv from 'dotenv';
 // options for cors midddleware ---> should review it carefully
 const options: cors.CorsOptions = {
   // tslint:disable-next-line:max-line-length
-  allowedHeaders: ['X-Requested-With', 'Content-Type', 'Authorization'], // 'Origin, X-Requested-With, Content-Type, Accept, Authorization, Access-Control-Allow-Credentials, X-Access-Token'
-  credentials: true,
-  methods: 'GET,POST', // 'PUT, GET, POST, DELETE, OPTIONS'
+  // allowedHeaders: ['Access-Control-Allow-Headers', 'Content-Type',
+  //   'X-Requested-With', 'Content-Type', 'Authorization'],
+  // 'Origin, X-Requested-With, Content-Type, Accept, Authorization, Access-Control-Allow-Credentials, X-Access-Token'
+  credentials: false,
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', // 'PUT, GET, POST, DELETE, OPTIONS'
   // origin: configs.getServerConfig().apiUrl, // *
   origin: '*', // *
   preflightContinue: false
@@ -62,7 +64,7 @@ class Server {
     this._app.use(cookieParser());
     this._app.use(express.static(configs.getServerConfig().publicPath));
     this._app.use(morgan('combined', { skip: skip, stream: <any>stream }));
-    // this._app.use(cors(options)); //deal with any Cross Origin Resource Sharing (CORS) issues we might run into
+    this._app.use(cors()); // deal with any Cross Origin Resource Sharing (CORS) issues we might run into
     this._app.use((error: Error, req: Request, res: Response, next: Function) => {
       if (error) {
         logger.error(`Request got error = ${error.message}`);
@@ -77,6 +79,11 @@ class Server {
 
     this._app.get('/*', function (req, res) {
       res.sendFile(configs.getServerConfig().publicPathHtml);
+    });
+
+    this._app.use(function (req, res, next) {
+      res.header('Access-Control-Allow-Origin', 'http://localhost:8000');
+      next();
     });
 
     // this._app.use(flash());

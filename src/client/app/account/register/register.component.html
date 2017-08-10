@@ -1,30 +1,38 @@
 <app-toast [message]="toast.message"></app-toast>
 
-<div class="card">
-    <h4 class="card-header">Register</h4>
-    <div class="card-block">
-        <form [formGroup]="registerForm" (ngSubmit)="register()">
-            <div class="input-group" [ngClass]="setClassUsername()">
-                <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                <input class="form-control" type="text" name="username" formControlName="username" placeholder="Username" autofocus>
-            </div>
-            <div class="input-group" [ngClass]="setClassEmail()">
-                <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
-                <input class="form-control" type="email" name="email" formControlName="email" placeholder="Email">
-            </div>
-            <div class="input-group" [ngClass]="setClassPassword()">
-                <span class="input-group-addon"><i class="fa fa-key"></i></span>
-                <input class="form-control" type="password" name="password" formControlName="password" placeholder="Password">
-            </div>
-            <div class="input-group">
-                <span class="input-group-addon"><i class="fa fa-black-tie"></i></span>
-                <select class="form-control" name="role" formControlName="role">
-          <option value="" selected disabled>Role</option>
-          <option value="user">User</option>
-          <option value="admin">Admin</option>
-        </select>
-            </div>
-            <button class="btn btn-primary" type="submit" [disabled]="!registerForm.valid"><i class="fa fa-user-plus"></i> Register</button>
-        </form>
-    </div>
+<div class="center-block" style="border: 0px solid #083858; width: 450px; padding: 0 10px 20px 20px;">
+    <h1 class="text-center" style="color: #083858;">Register</h1>
+
+    <form name="form" novalidate [formGroup]="registerForm" (ngSubmit)="register()">
+        <div class="form-group" [ngClass]="setClassUsername()">
+            <span class="form-group-addon"><i class="fa fa-user"></i></span>
+            <label class="control-label">UserName</label><br/>
+            <input class="form-control" type="text" name="username" formControlName="username" placeholder="Enter Username" autofocus>
+        </div>
+        <div class="form-group" [ngClass]="setClassEmail()">
+            <span class="form-group-addon"><i class="fa fa-envelope"></i></span>
+            <label class="control-label">Email</label><br/>
+            <input class="form-control" type="email" name="email" formControlName="email" placeholder="Enter Email">
+        </div>
+        <div class="form-group" [ngClass]="setClassPassword()">
+            <span class="form-group-addon"><i class="fa fa-key"></i></span>
+            <label class="control-label">Password</label><br/>
+            <input class="form-control" type="password" name="password" formControlName="password" placeholder="Password">
+        </div>
+        <div class="form-group">
+            <span class="form-group-addon"><i class="fa fa-black-tie"></i></span>
+            <label class="control-label">Role</label><br/>
+            <select class="form-control" name="role" formControlName="role">
+                  <option value="" selected disabled>Role</option>
+                  <option value="user">User</option>
+                  <option value="admin">Admin</option>
+                </select>
+        </div>
+        <button class="btn btn-primary" type="submit" [disabled]="!registerForm.valid">
+              <i class="fa fa-user-plus"></i> REGISTER
+            </button>
+        <button class="btn btn-primary" type="submit" routerLink="/login" routerLinkActive="active">
+              <i class="fa fa-sign-in"></i> LOGIN
+            </button>
+    </form>
 </div>
