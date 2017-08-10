@@ -1,28 +1,21 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var express = require("express");
+var express_1 = require("express");
 var index_1 = require("./utils/index");
 var cat_1 = require("./controllers/cat");
 var user_1 = require("./controllers/user");
-function setRoutes(app) {
+var routes = express_1.Router();
+exports.setRoutes = function (app) {
     index_1.logger.info("Route setup is starting !!!");
-    var router = express.Router();
     var catCtrl = new cat_1.default();
     var userCtrl = new user_1.default();
-    router.route('/cats').get(catCtrl.getAll);
-    router.route('/cats/count').get(catCtrl.count);
-    router.route('/cat').post(catCtrl.insert);
-    router.route('/cat/:id').get(catCtrl.get);
-    router.route('/cat/:id').put(catCtrl.update);
-    router.route('/cat/:id').delete(catCtrl.delete);
-    router.route('/login').post(userCtrl.login);
-    router.route('/users').get(userCtrl.getAll);
-    router.route('/users/count').get(userCtrl.count);
-    router.route('/user').post(userCtrl.insert);
-    router.route('/user/:id').get(userCtrl.get);
-    router.route('/user/:id').put(userCtrl.update);
-    router.route('/user/:id').delete(userCtrl.delete);
-    app.use('/api', router);
-}
-exports.default = setRoutes;
+    app.use('/api', routes);
+    routes.post('/login', userCtrl.login);
+    routes.get('/users', userCtrl.getAll);
+    routes.get('/users/count', userCtrl.count);
+    routes.post('/user', userCtrl.insert);
+    routes.get('/user/:id', userCtrl.get);
+    routes.put('/user/:id', userCtrl.update);
+    routes.delete('/user/:id', userCtrl.delete);
+};
 //# sourceMappingURL=routes.js.map

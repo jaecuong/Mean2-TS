@@ -2,14 +2,14 @@
 
 <div class="center-block" style="border: 0px solid #083858; width: 450px; padding: 0 10px 20px 20px;">
     <h1 class="text-center" style="color: #083858;">Login</h1>
-    <form name="form" novalidate (ngsubmit)="login()" [formGroup]="loginForm">
+    <form name="form" novalidate (ngSubmit)="login()" [formGroup]="loginForm">
 
         <div class="form-group" [ngClass]="{'has-error': (loginForm.controls.email.touched || loginForm.get('email').dirty) && !loginForm.get('email').valid}">
             <label class="control-label" for="emailId">Email</label><br/>
             <input type="email" id="emailId" class="form-control" placeholder="Enter email" autofocus formControlName="email">
             <span class="help-block" *ngIf="(loginForm.get('email').touched || loginForm.get('email').dirty) && loginForm.get('email').errors">
                 <span *ngIf="loginForm.get('email').errors.required">Please enter your Email Address</span>
-                <span *ngIf="loginForm.get('email').errors.pattern">Please enter valid Email Address, format should be : <i>JOSE@DAVID.COM</i>.</span>
+            <span *ngIf="loginForm.get('email').errors.pattern">Please enter valid Email Address, format should be : <i>JOSE@DAVID.COM</i>.</span>
             </span>
         </div>
 
@@ -18,20 +18,19 @@
             <input type="password" id="passwordId" placeholder="Enter password" class="form-control" formControlName="password">
             <span class="help-block" *ngIf="(loginForm.get('password').touched || loginForm.get('password').dirty) && loginForm.get('password').errors">
                 <span *ngIf="loginForm.get('password').errors.required">Please enter your password</span>
-                <span *ngIf="loginForm.get('password').errors.minLength">The Length of password should be greater than 3 </span>
+            <span *ngIf="loginForm.get('password').errors.minLength">The Length of password should be greater than 3 </span>
             </span>
         </div>
 
-        <div class="form-group">
-            <button class="btn btn-inverse btn-lg btn-primary" [disabled]="!loginForm.valid">
+
+        <button class="btn btn-inverse btn-lg btn-primary" [disabled]="!loginForm.valid">
               <i class="fa fa-sign-in"></i> LOGIN
             </button>
-            <button class="btn btn-inverse btn-lg btn-primary" routerLink="/register" routerLinkActive="active" *ngIf="!auth.loggedIn">
+        <button class="btn btn-inverse btn-lg btn-primary" routerLink="/register" routerLinkActive="active" *ngIf="!auth.loggedIn">
               <i class="fa fa-user-plus"></i> REGISTER
             </button>
-            <!-- <img *ngIf="isLoading" src="../../../assets/loader.gif" />
+        <!-- <img *ngIf="isLoading" src="../../../assets/loader.gif" />
             <a [routerLink]="['/signup']" class="btn btn-link">Signup</a> -->
-        </div>
 
         <!--
         <hr>

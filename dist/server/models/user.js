@@ -2,15 +2,18 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var bcrypt = require("bcryptjs");
 var mongoose = require("mongoose");
-var jwt = require("jsonwebtoken");
 var userSchema = new mongoose.Schema({
     username: String,
     email: { type: String, unique: true, lowercase: true, trim: true },
     password: String,
-    role: String
+    role: String,
+    createdAt: { type: Date, default: Date.now }
 });
 userSchema.pre('save', function (next) {
     var user = this;
+    if (!this.createdAt) {
+        this.createdAt = new Date();
+    }
     if (!user.isModified('password')) {
         return next();
     }
@@ -41,16 +44,6 @@ userSchema.set('toJSON', {
         return ret;
     }
 });
-userSchema.methods.generateJwt = function () {
-    var expiry = new Date();
-    expiry.setDate(expiry.getDate() + 7);
-    return jwt.sign({
-        _id: this._id,
-        email: this.email,
-        name: this.name,
-        exp: parseInt(expiry.getTime() / 1000),
-    }, "MY_SECRET");
-};
 var User = mongoose.model('User', userSchema);
 exports.default = User;
 //# sourceMappingURL=user.js.map

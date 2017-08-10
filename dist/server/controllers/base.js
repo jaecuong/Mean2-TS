@@ -5,6 +5,8 @@ var BaseCtrl = (function () {
     function BaseCtrl() {
         var _this = this;
         this.getAll = function (req, res) {
+            index_1.logger.info("Get All Object - Request " + req + " ");
+            index_1.logger.info("Get All Object - Response " + res + " ");
             _this.model.find({}, function (err, docs) {
                 if (err) {
                     return console.error(err);

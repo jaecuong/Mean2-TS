@@ -1,5 +1,6 @@
 import * as dotenv from 'dotenv';
 import * as jwt from 'jsonwebtoken';
+import { logger, skip, stream } from '../utils/index';
 
 import User from '../models/user';
 import BaseCtrl from './base';
@@ -8,6 +9,9 @@ export default class UserCtrl extends BaseCtrl {
   model = User;
 
   login = (req, res) => {
+    logger.info(`Insert new object - Request ${req} `);
+    logger.info(`Insert new object - Response ${res} `);
+
     this.model.findOne({ email: req.body.email }, (err, user) => {
       if (!user) { return res.sendStatus(403); }
       user.comparePassword(req.body.password, (error, isMatch) => {

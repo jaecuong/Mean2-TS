@@ -57,7 +57,9 @@ export class LoginComponent implements OnInit {
         else
           this.invalidLogin = true;
       },
-      error => this.toast.setMessage('invalid email or password!', 'danger')
+      error => {
+        this.toast.setMessage('invalid email or password! ' + error, 'danger');
+      }
     );
   }
 

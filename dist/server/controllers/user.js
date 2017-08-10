@@ -11,6 +11,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var jwt = require("jsonwebtoken");
+var index_1 = require("../utils/index");
 var user_1 = require("../models/user");
 var base_1 = require("./base");
 var UserCtrl = (function (_super) {
@@ -19,6 +20,8 @@ var UserCtrl = (function (_super) {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.model = user_1.default;
         _this.login = function (req, res) {
+            index_1.logger.info("Insert new object - Request " + req + " ");
+            index_1.logger.info("Insert new object - Response " + res + " ");
             _this.model.findOne({ email: req.body.email }, function (err, user) {
                 if (!user) {
                     return res.sendStatus(403);
